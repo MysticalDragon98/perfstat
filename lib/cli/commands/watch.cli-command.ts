@@ -14,6 +14,7 @@ export default async function watchREPLCommand (services: string[], options: IOp
         ok(pid, `Could not find PID for service ${service}`);
 
         const stats = executeShellCommand("sudo", ["perf", "stat", "-p", pid.toString(), "-I", options.interval ?? "5000", "-e", "task-clock"]).lines("stderr");
+        console.log(["perf", "stat", "-p", pid.toString(), "-I", options.interval ?? "5000", "-e", "task-clock"].join(" "));
         
         for await (const _line of stats) {
             const line = _line.trim();
