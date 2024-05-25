@@ -21,6 +21,9 @@ export default async function watchREPLCommand (services: string[], options: IOp
             if (line.startsWith("#")) continue;
 
             const match = line.match(PerfOutputRegex);
+            console.log({
+                line, match
+            })
             if (!match) continue;
 
             const { time, counts } = match.groups!;
