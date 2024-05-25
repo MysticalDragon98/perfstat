@@ -18,10 +18,12 @@ export default async function watchREPLCommand (services: string[], options: IOp
         for await (const _line of stats) {
             const line = _line.trim();
 
+            console.log("Line:", line);
+
             if (line.startsWith("#")) continue;
 
             const match = line.match(PerfOutputRegex);
-            
+            console.log("Match:", match);
             if (!match) continue;
 
             const { time, counts } = match.groups!;
