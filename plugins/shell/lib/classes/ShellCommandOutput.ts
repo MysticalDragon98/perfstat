@@ -18,5 +18,16 @@ export default class ShellCommandOutput {
         return rl;
     }
 
+    async output(type: "stdout" | "stderr" = "stdout"): Promise<string> {
+        const rl = this.lines(type);
+        let result = "";
+
+        for await (const line of rl) {
+            result += line + "\n";
+        }
+
+        return result;
+    }
+
 
 }
