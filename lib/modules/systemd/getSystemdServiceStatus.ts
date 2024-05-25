@@ -1,7 +1,7 @@
 import executeShellCommand from "../../../plugins/shell/lib/modules/executeShellCommand";
 import ISystemdServiceStatusOutput from "../../interfaces/SystemdServiceStatusOutput.interface";
 
-const header = /●\s+(?<serviceId>.+?)\s+\-\s+\"(<description>.+)\"/;
+const ServiceHeader = /●\s+(?<serviceId>.+?)\s+\-\s+\"(?<description>.+)\"/;
 
 export default async function getSystemdServiceStatus (serviceId: string) {
     const lines = await executeShellCommand("sudo", ["systemctl", "status", serviceId]).lines("stdout");
@@ -11,7 +11,7 @@ export default async function getSystemdServiceStatus (serviceId: string) {
         const line = _line.trim();
         console.log(line);
         if (line.startsWith("●")) {
-            const match = header.exec(line);
+            const match = ServiceHeader.exec(line);
 
             console.log(match);
 
