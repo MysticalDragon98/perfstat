@@ -9,9 +9,11 @@ export default async function getSystemdServiceStatus (serviceId: string) {
 
     for await (const _line of lines) {
         const line = _line.trim();
-
+        console.log(line);
         if (line.startsWith("●")) {
             const match = header.exec(line);
+
+            console.log(match);
 
             if (match) {
                 output.serviceId = match.groups.serviceId;
