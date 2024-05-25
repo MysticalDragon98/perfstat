@@ -6,6 +6,7 @@ export default async function getSystemdLastCommandPID (serviceId: string) {
     for await (const _line of output.lines("stdout")) {
         const line = _line.trim();
         if (line.startsWith("└─")) {
+            console.log(line)
             return parseInt(line.substring(1, line.indexOf(" ")));
         }
     }
