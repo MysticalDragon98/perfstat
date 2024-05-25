@@ -8,7 +8,7 @@ export default class ShellCommandOutput {
         this.proc = proc;
     }
 
-    lines (type: "stdout" | "stderr" = "stdout") {
+    lines (type: "stdout" | "stderr" = "stdout"): AsyncIterable<string> {
         const rl = createInterface({
             input: this.proc.stdout,
             output: type === "stdout" ? process.stdout : process.stderr,
