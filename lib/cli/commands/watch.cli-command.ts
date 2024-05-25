@@ -1,12 +1,30 @@
+import { ok } from "assert";
 import getSystemdLastCommandPID from "../../modules/systemd/getSystemdLastCommandPID";
+import executeShellCommand from "../../../plugins/shell/lib/modules/executeShellCommand";
+
+const PerfOutputRegex = /\s+(?<time>.+?)\s+(?<counts>.+?).+/;
 
 interface IOptions {
-    
+    interval: string;
 }
 
 export default async function watchREPLCommand (services: string[], options: IOptions) {
-    for (const service of services) {
+    await Promise.all(services.map(async service => {
         const pid = await getSystemdLastCommandPID(service);
-        console.log(`${service} is running with PID ${pid}`);
-    }
+        ok(pid, `Could not find PID for service ${service}`);
+
+        const stats = executeShellCommand("sudo", ["perf", "stat", "-p", pid.toString(), "-I", options.interval ?? "5000"]).lines();
+        
+        for await (const _line of stats) {
+            const line = _line.trim();
+
+            if (line.startsWith("#")) continue;
+
+            const match = line.match(PerfOutputRegex);
+            if (!match) continue;
+
+            const { time, counts } = match.groups!;
+            console.log(`${service} ${time} ${counts}`);
+        }
+    }));
 }
