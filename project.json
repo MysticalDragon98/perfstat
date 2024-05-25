@@ -1,0 +1,11 @@
+{
+    "type": "ts",
+    "plugins": [
+        "cli"
+    ],
+    "options": {
+        "type": "ts",
+        "plugins": [],
+        "options": {}
+    }
+}
